@@ -103,7 +103,7 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk/ssocks package/extra/
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray-core package/extra/xray-core
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/v2ray-plugin package/extra/v2ray-plugin
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray-plugin package/extra/xray-plugin
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/package/extra/hysteria
+svn co https://github.com/xiaorouji/openwrt-passwall/trunk/hysteria package/extra/hysteria
 svn co https://github.com/fw876/helloworld/trunk/v2ray-core package/extra/v2ray-core
 
 # KMS 激活助手
