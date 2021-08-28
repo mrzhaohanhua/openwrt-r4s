@@ -80,7 +80,13 @@ sed -i -e 's/^\(.\).*vermagic$/\1cp $(TOPDIR)\/.vermagic $(LINUX_DIR)\/.vermagic
 ### 获取额外的 LuCI 应用、主题和依赖 ###
 
 #AdGuardHome
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-adguardhome package/extra/luci-app-adguardhome
+#cp -rf ../openwrt-lienol/package/diy/luci-app-adguardhome ./package/new/luci-app-adguardhome
+svn co https://github.com/Lienol/openwrt/trunk/package/diy/luci-app-adguardhome ./package/extra/luci-app-adguardhome
+#删除原feed中的adguardhome
+rm -rf ./feeds/packages/net/adguardhome
+svn co https://github.com/openwrt/packages/trunk/net/adguardhome feeds/packages/net/adguardhome
+sed -i '/\t)/a\\t$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/AdGuardHome' ./feeds/packages/net/adguardhome/Makefile
+sed -i '/init/d' feeds/packages/net/adguardhome/Makefile
 
 # ChinaDNS
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/chinadns-ng/ package/extra/chinadns-ng
