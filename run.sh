@@ -2,22 +2,41 @@
 clear
 
 #获取openwrt
-git clone --depth 1 -b v21.02.1 https://github.com/openwrt/openwrt openwrt
+latest_release="$(curl -s https://github.com/openwrt/openwrt/tags | grep -Eo "v[0-9\.]+\-*r*c*[0-9]*.tar.gz" | sed -n '/[2-9][0-9]/p' | sed -n 1p | sed 's/.tar.gz//g')"
+git clone --single-branch -b ${latest_release} https://github.com/openwrt/openwrt openwrt_release
+git clone --single-branch -b openwrt-21.02 https://github.com/openwrt/openwrt openwrt
+rm -f ./openwrt/include/version.mk
+rm -f ./openwrt/include/kernel.mk
+rm -f ./openwrt/include/kernel-version.mk
+rm -f ./openwrt/include/toolchain-build.mk
+rm -f ./openwrt/include/kernel-defaults.mk
+rm -f ./openwrt/package/base-files/image-config.in
+rm -rf ./openwrt/target/linux/*
+cp -f ./openwrt_release/include/version.mk ./openwrt/include/version.mk
+cp -f ./openwrt_release/include/kernel.mk ./openwrt/include/kernel.mk
+cp -f ./openwrt_release/include/kernel-version.mk ./openwrt/include/kernel-version.mk
+cp -f ./openwrt_release/include/toolchain-build.mk ./openwrt/include/toolchain-build.mk
+cp -f ./openwrt_release/include/kernel-defaults.mk ./openwrt/include/kernel-defaults.mk
+cp -f ./openwrt_release/package/base-files/image-config.in ./openwrt/package/base-files/image-config.in
+cp -f ./openwrt_release/version ./openwrt/version
+cp -f ./openwrt_release/version.date ./openwrt/version.date
+cp -rf ./openwrt_release/target/linux/* ./openwrt/target/linux/
+
 #切换到openwrt目录
 cd openwrt 
-
 #以下代码参考QiuSimons的script
-
 # 使用 O3 级别的优化
-sed -i 's/Os/O3/g' include/target.mk
+sed -i 's/Os/O3 -funsafe-math-optimizations -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections/g' include/target.mk
+# 使用特定的优化
+sed -i 's,-mcpu=generic,-mcpu=cortex-a72.cortex-a53+crypto,g' include/target.mk
+sed -i 's,kmod-r8169,kmod-r8168,g' target/linux/rockchip/image/armv8.mk
+
 # 更新 Feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 ./scripts/feeds install -a
-
 # 默认开启 Irqbalance
 sed -i "s/enabled '0'/enabled '1'/g" feeds/packages/utils/irqbalance/files/irqbalance.config
-
 # 移除 SNAPSHOT 标签
 sed -i 's,-SNAPSHOT,,g' include/version.mk
 sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
