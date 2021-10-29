@@ -2,7 +2,7 @@
 clear
 
 #获取openwrt
-git clone --depth 1 -b v21.02.0 https://github.com/openwrt/openwrt openwrt
+git clone --depth 1 -b v21.02.1 https://github.com/openwrt/openwrt openwrt
 #切换到openwrt目录
 cd openwrt 
 
