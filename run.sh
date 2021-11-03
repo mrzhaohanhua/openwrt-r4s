@@ -1,101 +1,71 @@
 #!/bin/bash
 clear
-
 #获取openwrt
-latest_release="$(curl -s https://github.com/openwrt/openwrt/tags | grep -Eo "v[0-9\.]+\-*r*c*[0-9]*.tar.gz" | sed -n '/[2-9][0-9]/p' | sed -n 1p | sed 's/.tar.gz//g')"
-git clone --single-branch -b ${latest_release} https://github.com/openwrt/openwrt openwrt_release
-git clone --single-branch -b openwrt-21.02 https://github.com/openwrt/openwrt openwrt
-rm -f ./openwrt/include/version.mk
-rm -f ./openwrt/include/kernel.mk
-rm -f ./openwrt/include/kernel-version.mk
-rm -f ./openwrt/include/toolchain-build.mk
-rm -f ./openwrt/include/kernel-defaults.mk
-rm -f ./openwrt/package/base-files/image-config.in
-rm -rf ./openwrt/target/linux/*
-cp -f ./openwrt_release/include/version.mk ./openwrt/include/version.mk
-cp -f ./openwrt_release/include/kernel.mk ./openwrt/include/kernel.mk
-cp -f ./openwrt_release/include/kernel-version.mk ./openwrt/include/kernel-version.mk
-cp -f ./openwrt_release/include/toolchain-build.mk ./openwrt/include/toolchain-build.mk
-cp -f ./openwrt_release/include/kernel-defaults.mk ./openwrt/include/kernel-defaults.mk
-cp -f ./openwrt_release/package/base-files/image-config.in ./openwrt/package/base-files/image-config.in
-cp -f ./openwrt_release/version ./openwrt/version
-cp -f ./openwrt_release/version.date ./openwrt/version.date
-cp -rf ./openwrt_release/target/linux/* ./openwrt/target/linux/
-
+#latest_release="$(curl -s https://github.com/openwrt/openwrt/tags | grep -Eo "v[0-9\.]+\-*r*c*[0-9]*.tar.gz" | sed -n '/[2-9][0-9]/p' | sed -n 1p | sed 's/.tar.gz//g')"
+#git clone --single-branch -b ${latest_release} https://github.com/openwrt/openwrt openwrt_release
+#git clone --single-branch -b openwrt-21.02 https://github.com/openwrt/openwrt openwrt
+#rm -f ./openwrt/include/version.mk
+#rm -f ./openwrt/include/kernel.mk
+#rm -f ./openwrt/include/kernel-version.mk
+#rm -f ./openwrt/include/toolchain-build.mk
+#rm -f ./openwrt/include/kernel-defaults.mk
+#rm -f ./openwrt/package/base-files/image-config.in
+#rm -rf ./openwrt/target/linux/*
+#cp -f ./openwrt_release/include/version.mk ./openwrt/include/version.mk
+#cp -f ./openwrt_release/include/kernel.mk ./openwrt/include/kernel.mk
+#cp -f ./openwrt_release/include/kernel-version.mk ./openwrt/include/kernel-version.mk
+#cp -f ./openwrt_release/include/toolchain-build.mk ./openwrt/include/toolchain-build.mk
+#cp -f ./openwrt_release/include/kernel-defaults.mk ./openwrt/include/kernel-defaults.mk
+#cp -f ./openwrt_release/package/base-files/image-config.in ./openwrt/package/base-files/image-config.in
+#cp -f ./openwrt_release/version ./openwrt/version
+#cp -f ./openwrt_release/version.date ./openwrt/version.date
+#cp -rf ./openwrt_release/target/linux/* ./openwrt/target/linux/
+git clone --depth 1 -b v21.02.1 https://github.com/openwrt/openwrt openwrt
 #切换到openwrt目录
 cd openwrt 
-#以下代码参考QiuSimons的script
-# 使用 O3 级别的优化
-sed -i 's/Os/O3 -funsafe-math-optimizations -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections/g' include/target.mk
+#以下参考https://github.com/QiuSimons/YAOF/blob/master/SCRIPTS/R4S/02_target_only.sh
 # 使用特定的优化
 sed -i 's,-mcpu=generic,-mcpu=cortex-a72.cortex-a53+crypto,g' include/target.mk
 sed -i 's,kmod-r8169,kmod-r8168,g' target/linux/rockchip/image/armv8.mk
-
+# CacULE
+sed -i '/CONFIG_NR_CPUS/d' ./target/linux/rockchip/armv8/config-5.4
+echo '
+CONFIG_NR_CPUS=6
+' >>./target/linux/rockchip/armv8/config-5.4
+# UKSM
+echo '
+CONFIG_KSM=y
+CONFIG_UKSM=y
+' >>./target/linux/rockchip/armv8/config-5.4
+# IRQ 调优
+sed -i '/set_interface_core 20 "eth1"/a\set_interface_core 8 "ff3c0000" "ff3c0000.i2c"' target/linux/rockchip/armv8/base-files/etc/hotplug.d/net/40-net-smp-affinity
+sed -i '/set_interface_core 20 "eth1"/a\ethtool -C eth0 rx-usecs 1000 rx-frames 25 tx-usecs 100 tx-frames 25' target/linux/rockchip/armv8/base-files/etc/hotplug.d/net/40-net-smp-affinity
+#以下参考https://github.com/QiuSimons/YAOF/blob/master/SCRIPTS/02_prepare_package.sh
+# 使用 O3 级别的优化
+sed -i 's/Os/O3 -funsafe-math-optimizations -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections/g' include/target.mk
 # 更新 Feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 ./scripts/feeds install -a
 # 默认开启 Irqbalance
 sed -i "s/enabled '0'/enabled '1'/g" feeds/packages/utils/irqbalance/files/irqbalance.config
-# 移除 SNAPSHOT 标签
-sed -i 's,-SNAPSHOT,,g' include/version.mk
-sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
-
+# 更换为 ImmortalWrt Uboot 以及 Target
+rm -rf ./target/linux/rockchip
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/target/linux/rockchip target/linux/rockchip
+rm -rf ./package/boot/uboot-rockchip
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/boot/uboot-rockchip package/boot/uboot-rockchip
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/boot/arm-trusted-firmware-rockchip-vendor package/boot/arm-trusted-firmware-rockchip-vendor
+rm -rf ./package/kernel/linux/modules/video.mk
+wget -P package/kernel/linux/modules/ https://github.com/immortalwrt/immortalwrt/raw/openwrt-21.02/package/kernel/linux/modules/video.mk
 # R8168驱动
-#svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/kernel/r8168 package/new/r8168
 git clone -b master --depth 1 https://github.com/BROBIRD/openwrt-r8168.git package/extra/r8168
-#patch -p1 < ../PATCH/r8168/r8168-fix_LAN_led-for_r4s-from_TL.patch
-
+# R8152驱动
+svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/kernel/r8152 package/extra/r8152
 # UPX 可执行软件压缩
 sed -i '/patchelf pkgconf/i\tools-y += ucl upx' ./tools/Makefile
 sed -i '\/autoconf\/compile :=/i\$(curdir)/upx/compile := $(curdir)/ucl/compile' ./tools/Makefile
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/upx tools/upx
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/ucl tools/ucl
-
-# 更换为 ImmortalWrt Uboot 以及 Target
-rm -rf ./target/linux/rockchip
-svn co https://github.com/immortalwrt/immortalwrt/branches/master/target/linux/rockchip target/linux/rockchip
-rm -rf ./package/boot/uboot-rockchip
-svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/boot/uboot-rockchip package/boot/uboot-rockchip
-svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/boot/arm-trusted-firmware-rockchip-vendor package/boot/arm-trusted-firmware-rockchip-vendor
-
-# IRQ 调优
-sed -i '/set_interface_core 20 "eth1"/a\set_interface_core 8 "ff3c0000" "ff3c0000.i2c"' target/linux/rockchip/armv8/base-files/etc/hotplug.d/net/40-net-smp-affinity
-sed -i '/set_interface_core 20 "eth1"/a\ethtool -C eth0 rx-usecs 1000 rx-frames 25 tx-usecs 100 tx-frames 25' target/linux/rockchip/armv8/base-files/etc/hotplug.d/net/40-net-smp-affinity
-
-# 添加 R4S GPU 驱动
-rm -rf ./package/kernel/linux/modules/video.mk
-wget -P package/kernel/linux/modules/ https://github.com/immortalwrt/immortalwrt/raw/master/package/kernel/linux/modules/video.mk
-
-# 内核加解密模块
-echo '
-CONFIG_ARM64_CRYPTO=y
-CONFIG_CRYPTO_SHA256_ARM64=y
-CONFIG_CRYPTO_SHA512_ARM64=y
-CONFIG_CRYPTO_SHA1_ARM64_CE=y
-CONFIG_CRYPTO_SHA2_ARM64_CE=y
-# CONFIG_CRYPTO_SHA512_ARM64_CE is not set
-CONFIG_CRYPTO_SHA3_ARM64=y
-CONFIG_CRYPTO_SM3_ARM64_CE=y
-CONFIG_CRYPTO_SM4_ARM64_CE=y
-CONFIG_CRYPTO_GHASH_ARM64_CE=y
-# CONFIG_CRYPTO_CRCT10DIF_ARM64_CE is not set
-CONFIG_CRYPTO_AES_ARM64=y
-CONFIG_CRYPTO_AES_ARM64_CE=y
-CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
-CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
-CONFIG_CRYPTO_AES_ARM64_NEON_BLK=y
-CONFIG_CRYPTO_CHACHA20_NEON=y
-CONFIG_CRYPTO_POLY1305_NEON=y
-CONFIG_CRYPTO_NHPOLY1305_NEON=y
-CONFIG_CRYPTO_AES_ARM64_BS=y
-' >> ./target/linux/rockchip/armv8/config-5.4
-
-#Vermagic
-latest_version="$(curl -s https://github.com/openwrt/openwrt/releases |grep -Eo "v[0-9\.]+\-*r*c*[0-9]*.tar.gz" |sed -n '/21/p' |sed -n 1p |sed 's/v//g' |sed 's/.tar.gz//g')"
-wget https://downloads.openwrt.org/releases/${latest_version}/targets/rockchip/armv8/packages/Packages.gz
-zgrep -m 1 "Depends: kernel (=.*)$" Packages.gz | sed -e 's/.*-\(.*\))/\1/' > .vermagic
-sed -i -e 's/^\(.\).*vermagic$/\1cp $(TOPDIR)\/.vermagic $(LINUX_DIR)\/.vermagic/' include/kernel-defaults.mk
 
 ### 获取额外的 LuCI 应用、主题和依赖 ###
 
