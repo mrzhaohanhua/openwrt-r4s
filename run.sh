@@ -68,6 +68,9 @@ svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/upx tool
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/ucl tools/ucl
 
 ### 获取额外的 LuCI 应用、主题和依赖 ###
+#AliyunDrive-WebDav
+svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav /package/extra/aliyundrive-webdav
+svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/luci-app-aliyundrive-webdav /package/extra/luci-app-aliyundrive-webdav
 
 #AdGuardHome
 #cp -rf ../openwrt-lienol/package/diy/luci-app-adguardhome ./package/new/luci-app-adguardhome
