@@ -84,10 +84,12 @@ rm -rf ./feeds/packages/net/adguardhome
 svn co https://github.com/openwrt/packages/trunk/net/adguardhome feeds/packages/net/adguardhome
 sed -i '/\t)/a\\t$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/AdGuardHome' ./feeds/packages/net/adguardhome/Makefile
 sed -i '/init/d' feeds/packages/net/adguardhome/Makefile
-
+# socat
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-socat package/extra/luci-app-socat
 # ChinaDNS
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/chinadns-ng/ package/extra/chinadns-ng
-
+# OLED 驱动程序
+git clone -b master --depth 1 https://github.com/NateLol/luci-app-oled.git package/extra/luci-app-oled
 # Passwall
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/luci-app-passwall package/extra/luci-app-passwall
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/ipt2socks package/extra/ipt2socks
