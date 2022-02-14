@@ -113,7 +113,7 @@ svn co https://github.com/fw876/helloworld/trunk/v2ray-core package/extra/v2ray-
 
 # KMS 激活助手
 svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd package/extra/luci-app-vlmcsd
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/vlmcsd package/extra/vlmcsd
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/vlmcsd package/extra/vlmcsd
 
 #微信消息推送
 git clone --depth 1 https://github.com/tty228/luci-app-serverchan package/extra/luci-app-serverchan
