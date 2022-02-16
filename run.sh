@@ -119,7 +119,7 @@ svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/vlmcsd package/extr
 git clone --depth 1 https://github.com/tty228/luci-app-serverchan package/extra/luci-app-serverchan
 
 #Luci主题
-# svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-theme-neobird package/extra/luci-theme-neobird
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-theme-neobird package/extra/luci-theme-neobird
 
 # 最大连接数
 sed -i 's/16384/65535/g' package/kernel/linux/files/sysctl-nf-conntrack.conf
