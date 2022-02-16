@@ -112,14 +112,14 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk/hysteria package/extr
 svn co https://github.com/fw876/helloworld/trunk/v2ray-core package/extra/v2ray-core
 
 # KMS 激活助手
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd package/extra/luci-app-vlmcsd
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-vlmcsd package/extra/luci-app-vlmcsd
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/vlmcsd package/extra/vlmcsd
 
 #微信消息推送
 git clone --depth 1 https://github.com/tty228/luci-app-serverchan package/extra/luci-app-serverchan
 
 #Luci主题
-svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-theme-neobird package/extra/luci-theme-neobird
+# svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-theme-neobird package/extra/luci-theme-neobird
 
 # 最大连接数
 sed -i 's/16384/65535/g' package/kernel/linux/files/sysctl-nf-conntrack.conf
