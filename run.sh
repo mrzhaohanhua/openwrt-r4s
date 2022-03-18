@@ -91,12 +91,13 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk/chinadns-ng/ package/
 # OLED 驱动程序
 git clone -b master --depth 1 https://github.com/NateLol/luci-app-oled.git package/extra/luci-app-oled
 # Passwall
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/luci-app-passwall package/extra/luci-app-passwall
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/ipt2socks package/extra/ipt2socks
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/microsocks package/extra/microsocks
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/dns2socks package/extra/dns2socks
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/naiveproxy package/extra/naiveproxy
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/pdnsd-alt package/extra/pdnsd-alt
+# svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-passwall package/extra/luci-app-passwall
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall2 package/extra/luci-app-passwall2
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/ipt2socks package/extra/ipt2socks
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/microsocks package/extra/microsocks
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/dns2socks package/extra/dns2socks
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/naiveproxy package/extra/naiveproxy
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/pdnsd-alt package/extra/pdnsd-alt
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/shadowsocks-rust package/extra/shadowsocks-rust
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/shadowsocksr-libev package/extra/shadowsocksr-libev
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/simple-obfs package/extra/simple-obfs
