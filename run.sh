@@ -68,49 +68,48 @@ svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/upx tool
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/ucl tools/ucl
 
 ### 获取额外的 LuCI 应用、主题和依赖 ###
+
 #AliyunDrive-WebDav
 svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav package/extra/aliyundrive-webdav
 svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/luci-app-aliyundrive-webdav package/extra/luci-app-aliyundrive-webdav
+
 # SmartDNS(原SmartDNS版本较低)
 rm -rf ./feeds/packages/net/smartdns
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/smartdns feeds/packages/net/smartdns
 rm -rf ./feeds/luci/applications/luci-app-smartdns
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-smartdns feeds/luci/applications/luci-app-smartdns
-#AdGuardHome
-#cp -rf ../openwrt-lienol/package/diy/luci-app-adguardhome ./package/new/luci-app-adguardhome
-svn co https://github.com/Lienol/openwrt/trunk/package/diy/luci-app-adguardhome ./package/extra/luci-app-adguardhome
-#删除原feed中的adguardhome
-rm -rf ./feeds/packages/net/adguardhome
-svn co https://github.com/openwrt/packages/trunk/net/adguardhome feeds/packages/net/adguardhome
-sed -i '/\t)/a\\t$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/AdGuardHome' ./feeds/packages/net/adguardhome/Makefile
-sed -i '/init/d' feeds/packages/net/adguardhome/Makefile
+
 # socat
 svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-socat package/extra/luci-app-socat
+
 # ChinaDNS
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/chinadns-ng/ package/extra/chinadns-ng
+
 # OLED 驱动程序
 git clone -b master --depth 1 https://github.com/NateLol/luci-app-oled.git package/extra/luci-app-oled
+
 # Passwall
-# svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-passwall package/extra/luci-app-passwall
+# svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall package/extra/luci-app-passwall
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall2 package/extra/luci-app-passwall2
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/ipt2socks package/extra/ipt2socks
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/microsocks package/extra/microsocks
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/dns2socks package/extra/dns2socks
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/naiveproxy package/extra/naiveproxy
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/pdnsd-alt package/extra/pdnsd-alt
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/shadowsocks-rust package/extra/shadowsocks-rust
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/shadowsocksr-libev package/extra/shadowsocksr-libev
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/simple-obfs package/extra/simple-obfs
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/tcping package/extra/tcping
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/trojan-go package/extra/trojan-go
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/brook package/extra/brook
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/trojan-plus package/extra/trojan-plus
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/ssocks package/extra/ssocks
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray-core package/extra/xray-core
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/v2ray-plugin package/extra/v2ray-plugin
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray-plugin package/extra/xray-plugin
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/hysteria package/extra/hysteria
-svn co https://github.com/fw876/helloworld/trunk/v2ray-core package/extra/v2ray-core
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/shadowsocks-rust package/extra/shadowsocks-rust
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/shadowsocksr-libev package/extra/shadowsocksr-libev
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/simple-obfs package/extra/simple-obfs
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/tcping package/extra/tcping
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/trojan-go package/extra/trojan-go
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/brook package/extra/brook
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/trojan-plus package/extra/trojan-plus
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/ssocks package/extra/ssocks
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/xray-core package/extra/xray-core
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/v2ray-plugin package/extra/v2ray-plugin
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/xray-plugin package/extra/xray-plugin
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/hysteria package/extra/hysteria
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/v2ray-core package/extra/v2ray-core
+svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/v2ray-geodata package/extra/v2ray-geodata
 
 # KMS 激活助手
 svn co https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-vlmcsd package/extra/luci-app-vlmcsd
