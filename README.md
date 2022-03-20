@@ -6,7 +6,7 @@
 
 除了OpenWrt官方代码外，增加了passwall、kms激活助手等功能。
 
-QiuSimons对R4S进行了超频，这里没有采用，以降低对电源的要求，可以使用低电流的USB插口。
+QiuSimons对R4S进行了超频，这里没有采用，以降低对电源的要求，可以使用低功率的USB接口。
 
 ```BASH
 git clone https://github.com/mrzhaohanhua/openwrt-r4s
