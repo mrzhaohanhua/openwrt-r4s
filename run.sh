@@ -19,6 +19,19 @@ rm -rf package/boot/uboot-rockchip
 svn export https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/boot/uboot-rockchip package/boot/uboot-rockchip
 svn export https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/boot/arm-trusted-firmware-rockchip-vendor package/boot/arm-trusted-firmware-rockchip-vendor
 
+# 使用 O3 级别的优化（来自QiuSimons/YAOF）
+sed -i 's/Os/O3 -funsafe-math-optimizations -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections/g' include/target.mk
+
+# 移除 SNAPSHOT 标签（来自QiuSimons/YAOF）
+sed -i 's,-SNAPSHOT,,g' include/version.mk
+sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
+
+# offload bug fix（来自QiuSimons/YAOF）
+wget -qO - https://github.com/openwrt/openwrt/pull/4849.patch | patch -p1
+
+# Patch arm64 型号名称（来自QiuSimons/YAOF）
+wget -P target/linux/generic/hack-5.4/ https://github.com/immortalwrt/immortalwrt/raw/openwrt-21.02/target/linux/generic/hack-5.4/312-arm64-cpuinfo-Add-model-name-in-proc-cpuinfo-for-64bit-ta.patch
+
 # 更新 Feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
