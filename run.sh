@@ -65,7 +65,7 @@ svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwal
 git clone -b master --depth 1 https://github.com/NateLol/luci-app-oled.git package/extra/luci-app-oled
 
 # Passwall
-# svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall package/extra/luci-app-passwall
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall package/extra/luci-app-passwall
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall2 package/extra/luci-app-passwall2
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/ipt2socks package/extra/ipt2socks
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/microsocks package/extra/microsocks
