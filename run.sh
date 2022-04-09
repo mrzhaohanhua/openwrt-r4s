@@ -1,7 +1,12 @@
 #!/bin/bash
 clear
+
+### 清理 ###
+rm -rf openwrt
+
 ### 获取openwrt ###
 git clone --depth 1 -b v21.02.2 https://github.com/openwrt/openwrt openwrt
+
 #切换到openwrt目录
 cd openwrt 
 
@@ -59,33 +64,33 @@ svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-smartd
 svn export https://github.com/Lienol/openwrt-package/trunk/luci-app-socat package/extra/luci-app-socat
 
 # ChinaDNS
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/chinadns-ng/ package/extra/chinadns-ng
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/chinadns-ng/ package/extra/chinadns-ng
 
 # OLED 驱动程序
 git clone -b master --depth 1 https://github.com/NateLol/luci-app-oled.git package/extra/luci-app-oled
 
 # Passwall
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall package/extra/luci-app-passwall
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/luci-app-passwall2 package/extra/luci-app-passwall2
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/ipt2socks package/extra/ipt2socks
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/microsocks package/extra/microsocks
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/dns2socks package/extra/dns2socks
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/naiveproxy package/extra/naiveproxy
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/pdnsd-alt package/extra/pdnsd-alt
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/shadowsocks-rust package/extra/shadowsocks-rust
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/shadowsocksr-libev package/extra/shadowsocksr-libev
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/simple-obfs package/extra/simple-obfs
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/tcping package/extra/tcping
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/trojan-go package/extra/trojan-go
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/brook package/extra/brook
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/trojan-plus package/extra/trojan-plus
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/ssocks package/extra/ssocks
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/xray-core package/extra/xray-core
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/v2ray-plugin package/extra/v2ray-plugin
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/xray-plugin package/extra/xray-plugin
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/hysteria package/extra/hysteria
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/v2ray-core package/extra/v2ray-core
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/openwrt-passwall/v2ray-geodata package/extra/v2ray-geodata
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-passwall package/extra/luci-app-passwall
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-passwall2 package/extra/luci-app-passwall2
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/ipt2socks package/extra/ipt2socks
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/microsocks package/extra/microsocks
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/dns2socks package/extra/dns2socks
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/naiveproxy package/extra/naiveproxy
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/pdnsd-alt package/extra/pdnsd-alt
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/shadowsocks-rust package/extra/shadowsocks-rust
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/shadowsocksr-libev package/extra/shadowsocksr-libev
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/simple-obfs package/extra/simple-obfs
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/tcping package/extra/tcping
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/trojan-go package/extra/trojan-go
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/brook package/extra/brook
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/trojan-plus package/extra/trojan-plus
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/ssocks package/extra/ssocks
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/xray-core package/extra/xray-core
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/v2ray-plugin package/extra/v2ray-plugin
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/xray-plugin package/extra/xray-plugin
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/hysteria package/extra/hysteria
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/v2ray-core package/extra/v2ray-core
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/v2ray-geodata package/extra/v2ray-geodata
 
 # KMS 激活助手
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-vlmcsd package/extra/luci-app-vlmcsd
