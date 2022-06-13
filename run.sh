@@ -5,7 +5,7 @@ clear
 rm -rf openwrt
 
 ### 获取openwrt ###
-git clone --depth 1 -b v21.02.2 https://github.com/openwrt/openwrt openwrt
+git clone --depth 1 -b v21.02.3 https://github.com/openwrt/openwrt openwrt
 
 #切换到openwrt目录
 cd openwrt 
@@ -32,7 +32,7 @@ sed -i 's,-SNAPSHOT,,g' include/version.mk
 sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
 
 # offload bug fix（来自QiuSimons/YAOF）
-wget -qO - https://github.com/openwrt/openwrt/pull/4849.patch | patch -p1
+#wget -qO - https://github.com/openwrt/openwrt/pull/4849.patch | patch -p1
 
 # Patch arm64 型号名称（来自QiuSimons/YAOF）
 wget -P target/linux/generic/hack-5.4/ https://github.com/immortalwrt/immortalwrt/raw/openwrt-21.02/target/linux/generic/hack-5.4/312-arm64-cpuinfo-Add-model-name-in-proc-cpuinfo-for-64bit-ta.patch
