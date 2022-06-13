@@ -49,6 +49,14 @@ svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/tools/upx tools
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/tools/ucl tools/ucl
 
 ### 获取额外的 LuCI 应用、主题和依赖 ###
+#替换原frp
+rm -rf ./feeds/luci/applications/luci-app-frps
+rm -rf ./feeds/luci/applications/luci-app-frpc
+rm -rf ./feeds/packages/net/frp
+rm -f ./package/feeds/packages/frp
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-frps package/extra/luci-app-frps
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-frpc package/extra/luci-app-frpc
+svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/frp package/extra/frp
 
 #AliyunDrive-WebDav
 svn export https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav package/extra/aliyundrive-webdav
