@@ -10,37 +10,43 @@ git clone --depth 1 -b v21.02.3 https://github.com/openwrt/openwrt openwrt
 #切换到openwrt目录
 cd openwrt 
 
-### 更换关键文件 ###
-# 更换为 ImmortalWrt的target
-rm -rf target/linux/rockchip
-svn export https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/target/linux/rockchip target/linux/rockchip
-
-## 更换target后kmod会有问题
-rm -rf package/kernel/linux/modules/video.mk
-wget -P package/kernel/linux/modules/ https://github.com/immortalwrt/immortalwrt/raw/openwrt-21.02/package/kernel/linux/modules/video.mk
-
-# 更换为 ImmortalWrt的uboot
-rm -rf package/boot/uboot-rockchip
-svn export https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/boot/uboot-rockchip package/boot/uboot-rockchip
-svn export https://github.com/immortalwrt/immortalwrt/branches/openwrt-21.02/package/boot/arm-trusted-firmware-rockchip-vendor package/boot/arm-trusted-firmware-rockchip-vendor
-
-# 使用 O3 级别的优化（来自QiuSimons/YAOF）
-sed -i 's/Os/O3 -funsafe-math-optimizations -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections/g' include/target.mk
-
-# 移除 SNAPSHOT 标签（来自QiuSimons/YAOF）
-sed -i 's,-SNAPSHOT,,g' include/version.mk
-sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
-
-# offload bug fix（来自QiuSimons/YAOF）
-#wget -qO - https://github.com/openwrt/openwrt/pull/4849.patch | patch -p1
-
-# Patch arm64 型号名称（来自QiuSimons/YAOF）
-wget -P target/linux/generic/hack-5.4/ https://github.com/immortalwrt/immortalwrt/raw/openwrt-21.02/target/linux/generic/hack-5.4/312-arm64-cpuinfo-Add-model-name-in-proc-cpuinfo-for-64bit-ta.patch
+# 使用 O3 级别的优化
+sed -i 's/Os/O3 -Wl,--gc-sections/g' include/target.mk
+wget -qO - https://github.com/openwrt/openwrt/commit/8249a8c.patch | patch -p1
+wget -qO - https://github.com/openwrt/openwrt/commit/66fa343.patch | patch -p1
 
 # 更新 Feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 ./scripts/feeds install -a
+
+# 默认开启 Irqbalance
+sed -i "s/enabled '0'/enabled '1'/g" feeds/packages/utils/irqbalance/files/irqbalance.config
+
+# 移除 SNAPSHOT 标签
+sed -i 's,-SNAPSHOT,,g' include/version.mk
+sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
+
+### 更换关键文件 ###
+# 更换为 ImmortalWrt Uboot 以及 Target
+rm -rf ./target/linux/rockchip
+svn export https://github.com/coolsnowwolf/lede/trunk/target/linux/rockchip target/linux/rockchip
+wget -qO - https://github.com/immortalwrt/immortalwrt/commit/af93561.patch | patch -p1
+rm -rf ./target/linux/rockchip/Makefile
+wget -P target/linux/rockchip/ https://github.com/openwrt/openwrt/raw/openwrt-22.03/target/linux/rockchip/Makefile
+rm -rf ./target/linux/rockchip/patches-5.10/002-net-usb-r8152-add-LED-configuration-from-OF.patch
+rm -rf ./target/linux/rockchip/patches-5.10/003-dt-bindings-net-add-RTL8152-binding-documentation.patch
+
+rm -rf ./package/boot/uboot-rockchip
+svn export https://github.com/immortalwrt/immortalwrt/branches/master/package/boot/uboot-rockchip package/boot/uboot-rockchip
+
+svn export https://github.com/immortalwrt/immortalwrt/branches/master/package/boot/arm-trusted-firmware-rockchip-vendor package/boot/arm-trusted-firmware-rockchip-vendor
+
+rm -rf ./package/kernel/linux/modules/video.mk
+wget -P package/kernel/linux/modules/ https://github.com/immortalwrt/immortalwrt/raw/master/package/kernel/linux/modules/video.mk
+
+# Patch arm64 型号名称（来自QiuSimons/YAOF）
+wget -P target/linux/generic/hack-5.4/ https://github.com/immortalwrt/immortalwrt/raw/openwrt-21.02/target/linux/generic/hack-5.4/312-arm64-cpuinfo-Add-model-name-in-proc-cpuinfo-for-64bit-ta.patch
 
 # UPX 可执行软件压缩
 sed -i '/patchelf pkgconf/i\tools-y += ucl upx' ./tools/Makefile
@@ -49,6 +55,10 @@ svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/tools/upx tools
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/tools/ucl tools/ucl
 
 ### 获取额外的 LuCI 应用、主题和依赖 ###
+
+# Edge 主题
+git clone -b master --depth 1 https://github.com/kiddin9/luci-theme-edge.git package/new/luci-theme-edge
+
 #替换原frp
 rm -rf ./feeds/luci/applications/luci-app-frps
 rm -rf ./feeds/luci/applications/luci-app-frpc
@@ -103,9 +113,6 @@ svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/v2ray-geodata p
 # KMS 激活助手
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-app-vlmcsd package/extra/luci-app-vlmcsd
 svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/vlmcsd package/extra/vlmcsd
-
-#Luci主题
-svn export https://github.com/mrzhaohanhua/openwrt-package/trunk/luci-theme-neobird package/extra/luci-theme-neobird
 
 ### 后续修改 ###
 
